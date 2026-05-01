@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+
+<StackPane fx:id="rootSala"
+           xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="ui.PartidaController"
+           stylesheets="@graphicResources/partida.css">
+
+    <!-- ========================= -->
+    <!-- CONTENIDO PRINCIPAL -->
+    <!-- ========================= -->
+    <AnchorPane fx:id="root" prefHeight="720" prefWidth="1280">
+
+        <!-- ZONA ARRIBA -->
+        <Pane fx:id="zonaArriba" prefHeight="200" prefWidth="1280" />
+
+        <!-- ZONA IZQUIERDA -->
+        <Pane fx:id="zonaIzquierda" prefHeight="720" prefWidth="260" />
+
+        <!-- ZONA DERECHA -->
+        <Pane fx:id="zonaDerecha" prefHeight="720" prefWidth="260" />
+
+        <!-- ZONA CENTRO -->
+        <AnchorPane fx:id="zonaCentro"
+                    prefHeight="400"
+                    prefWidth="400"
+                    layoutX="440"
+                    layoutY="160">
+
+            <Label fx:id="narradorLabel"
+                   text=""
+                   AnchorPane.leftAnchor="0"
+                   AnchorPane.rightAnchor="0"
+                   layoutY="20"
+                   style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: rgba(0,0,0,0.4); -fx-padding: 10px; -fx-background-radius: 8px;"
+                   alignment="CENTER" />
+
+            <Label fx:id="lblInfo"
+                   text=""
+                   layoutX="0"
+                   layoutY="300"
+                   prefWidth="400"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: black;"
+                   alignment="CENTER" />
+
+            <ImageView fx:id="imgMazo" fitHeight="150" layoutX="80" layoutY="125" preserveRatio="true" />
+            <ImageView fx:id="imgDescarte" fitHeight="150" layoutX="220" layoutY="125" preserveRatio="true" />
+
+            <!-- BOTONES PRIVADOS -->
+            <HBox fx:id="panelDecisionPrivada"
+                  spacing="20"
+                  alignment="CENTER"
+                  layoutX="0"
+                  layoutY="330"
+                  prefWidth="400"
+                  visible="false"
+                  managed="false">
+
+                <Button fx:id="btnOpcion1"
+                        text="Opción 1"
+                        style="-fx-font-size: 20px; -fx-padding: 10 20; -fx-background-radius: 8;"
+                        visible="false"
+                        managed="false"/>
+
+                <Button fx:id="btnOpcion2"
+                        text="Opción 2"
+                        style="-fx-font-size: 20px; -fx-padding: 10 20; -fx-background-radius: 8;"
+                        visible="false"
+                        managed="false"/>
+
+            </HBox>
+
+        </AnchorPane>
+
+        <!-- ZONA ABAJO -->
+        <Pane fx:id="zonaAbajo" prefHeight="260" prefWidth="1280" />
+
+        <Label fx:id="lblArriba" layoutX="910" layoutY="210" text="">
+            <font><Font name="System Bold" size="24.0" /></font>
+        </Label>
+
+        <Label fx:id="lblIzquierda" layoutX="180" layoutY="510" text="">
+            <font><Font name="System Bold" size="24.0" /></font>
+        </Label>
+
+        <Label fx:id="lblDerecha" layoutX="1620" layoutY="510" text="">
+            <font><Font name="System Bold" size="24.0" /></font>
+        </Label>
+
+        <Label fx:id="lblAbajo" layoutX="910.0" layoutY="820.0">
+            <font><Font name="System Bold" size="24.0" /></font>
+        </Label>
+
+    </AnchorPane>
+
+    <!-- ========================= -->
+    <!-- OVERLAY FINAL DE PARTIDA -->
+    <!-- ========================= -->
+    <StackPane fx:id="overlayFinal"
+               visible="false"
+               pickOnBounds="true"
+               style="-fx-background-color: rgba(0,0,0,0.55);">
+        <!-- El popup final se añadirá aquí -->
+    </StackPane>
+
+</StackPane>

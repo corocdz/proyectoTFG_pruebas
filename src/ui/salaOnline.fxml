@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.effect.GaussianBlur?>
+
+
+<!-- ROOT: StackPane para permitir fondo + contenido -->
+<StackPane fx:id="rootSala"
+           xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="ui.SalaOnlineController"
+           stylesheets="@graphicResources/salaOnline.css">
+
+    <!-- FONDO (imagen o color) -->
+    <ImageView fx:id="imgLogoFondo"
+               fitWidth="1000"
+               preserveRatio="true"
+               opacity="0.18">
+        <image>
+            <Image url="@graphicResources/imagenes/tokaledaCardsGame.png"/>
+        </image>
+        <effect>
+            <ColorAdjust saturation="-1" brightness="0.05" contrast="0.1"/>
+        </effect>
+    </ImageView>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <BorderPane fx:id="contenidoSala"
+                style="-fx-background-color: transparent;">
+
+        <!-- PARTE SUPERIOR -->
+        <top>
+            <VBox alignment="CENTER" fillWidth="true">
+                <padding>
+                    <Insets top="15" right="10" bottom="15" left="10"/>
+                </padding>
+
+                <Label fx:id="tituloSala"
+                       text="%salaOnline.titulo"
+                       alignment="CENTER"
+                       maxWidth="Infinity"
+                       maxHeight="Infinity"/>
+
+                <Label fx:id="lblCodigoSala"
+                       text="%salaOnline.codigo"
+                       alignment="CENTER"
+                       maxWidth="Infinity"/>
+            </VBox>
+
+        </top>
+
+        <!-- PARTE CENTRAL -->
+        <center>
+            <VBox spacing="20" alignment="CENTER">
+
+                <!-- Lista de jugadores -->
+                <VBox spacing="10" alignment="CENTER">
+                    <Label text="%salaOnline.jugadores"/>
+
+                    <ListView fx:id="listaJugadores"
+                              prefWidth="1150"
+                              maxWidth="1200"
+                              prefHeight="350"
+                              maxHeight="400"/>
+                </VBox>
+
+                <!-- Modo de juego -->
+                <VBox spacing="10" alignment="CENTER">
+                    <Label text="%salaOnline.modo"/>
+
+                    <ComboBox fx:id="comboModoJuego"
+                              prefWidth="220"/>
+                </VBox>
+
+            </VBox>
+        </center>
+
+        <!-- PARTE INFERIOR -->
+        <bottom>
+            <HBox spacing="20" alignment="CENTER">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Button fx:id="btnSalir" style="-fx-background-color: transparent; -fx-padding: 0;">
+                    <graphic>
+                        <ImageView fitWidth="380" preserveRatio="true">
+                            <image>
+                                <Image url="@graphicResources/imagenes/btnSalir.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>               
+
+                <Button fx:id="btnIniciar" style="-fx-background-color: transparent; -fx-padding: 0;">
+                    <graphic>
+                        <ImageView fitWidth="380" preserveRatio="true">
+                            <image>
+                                <Image url="@graphicResources/imagenes/btnIniciar.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                
+            </HBox>
+        </bottom>
+
+    </BorderPane>
+
+</StackPane>

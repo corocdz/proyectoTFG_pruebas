@@ -1,0 +1,75 @@
+@font-face {
+    font-family: "Minecraft";
+    src: url("fonts/Minecraft.ttf");
+}
+
+/* Fondo general */
+#rootLogin {
+    -fx-background-color: rgba(255, 105, 180, 0.35);
+}
+
+/* Título */
+#tituloLogin {
+    -fx-font-family: "Minecraft";
+    -fx-font-size: 55px;
+    -fx-text-fill: white;
+
+    -fx-effect: dropshadow(gaussian, rgba(120, 0, 60, 1), 10, 0.8, 0, 0),
+                dropshadow(gaussian, rgba(255, 105, 180, 0.6), 20, 0.4, 0, 0);
+}
+
+/* Inputs */
+.text-field, .password-field {
+    -fx-font-family: "Minecraft";
+    -fx-font-size: 22px;
+    -fx-text-fill: white;
+
+    -fx-background-color: rgba(40, 0, 20, 0.55);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.35);
+
+    -fx-padding: 10;
+}
+
+/* Placeholder */
+.text-field .text, .password-field .text {
+    -fx-fill: white;
+}
+
+/* Botones principales */
+.button {
+    -fx-font-family: "Minecraft";
+    -fx-font-size: 26px;
+    -fx-text-fill: white;
+
+    -fx-background-radius: 12;
+    -fx-background-color: rgba(255, 0, 120, 0.6);
+
+    -fx-effect: dropshadow(gaussian, rgba(120, 0, 60, 1), 6, 0.5, 0, 0);
+}
+
+.button:hover {
+    -fx-background-color: rgba(255, 0, 120, 0.8);
+    -fx-opacity: 0.9;
+}
+
+.tituloBienvenida {
+    -fx-font-family: "Minecraft";
+    -fx-font-size: 50px;
+    -fx-text-fill: white;
+
+    -fx-effect: dropshadow(gaussian, rgba(120, 0, 60, 1), 10, 0.8, 0, 0),
+                dropshadow(gaussian, rgba(255, 105, 180, 0.6), 20, 0.4, 0, 0);
+}
+
+.textoRegistro {
+    -fx-font-family: "Minecraft";
+    -fx-font-size: 24px;
+    -fx-text-fill: white;
+
+    -fx-effect: dropshadow(gaussian, rgba(120, 0, 60, 1), 4, 0.5, 0, 0),
+                dropshadow(gaussian, rgba(255, 105, 180, 0.6), 10, 0.3, 0, 0);
+}
+
+

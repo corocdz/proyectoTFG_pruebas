@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<StackPane fx:id="rootRegistro"
+           xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="ui.RegistroController"
+           stylesheets="@graphicResources/registro.css">
+
+    <BorderPane>
+
+        <!-- ZONA SUPERIOR: TÍTULO + LOGO -->
+        <top>
+            <VBox alignment="CENTER" spacing="10">
+                <padding>
+                    <Insets top="50" />
+                </padding>
+
+                <Label fx:id="tituloRegistro"
+                       text="%registro.titulo"
+                       styleClass="tituloRegistro"/>
+
+                <ImageView fx:id="logoImage" fitWidth="600" preserveRatio="true" />
+            </VBox>
+        </top>
+
+
+        <!-- ZONA CENTRAL: CAMPOS DE REGISTRO -->
+        <center>
+            <VBox spacing="25" alignment="CENTER">
+
+                <Label fx:id="subtituloRegistro"
+                       text="%registro.subtitulo"
+                       styleClass="tituloLogin"/>
+
+                <TextField fx:id="txtNombre"
+                           promptText="%registro.nombre"
+                           prefWidth="350"
+                           maxWidth="600"/>
+
+                <TextField fx:id="txtEmail"
+                           promptText="%registro.email"
+                           prefWidth="350"
+                           maxWidth="600"/>
+
+                <PasswordField fx:id="txtPassword"
+                               promptText="%registro.password"
+                               prefWidth="350"
+                               maxWidth="600"/>
+
+                <PasswordField fx:id="txtConfirmar"
+                               promptText="%registro.repetirPassword"
+                               prefWidth="350"
+                               maxWidth="600"/>
+
+            </VBox>
+        </center>
+
+
+        <!-- ZONA INFERIOR: TEXTO + BOTONES -->
+        <bottom>
+            <VBox spacing="5">
+
+                <!-- Texto encima del botón de volver -->
+                <HBox alignment="CENTER">
+                    <Region/>
+                    <Label fx:id="textoVolver"
+                           text="%registro.volverTexto"
+                           styleClass="textoVolver"
+                           translateX="-195"/>
+                    <Region/>
+                </HBox>
+
+                <!-- Botones grandes -->
+                <HBox spacing="40" alignment="CENTER">
+                    <padding>
+                        <Insets top="20" bottom="80"/>
+                    </padding>
+
+
+                    <!-- Botón Volver -->
+                    <Button fx:id="btnVolver"
+                            style="-fx-background-color: transparent; -fx-padding: 0;">
+                        <graphic>
+                            <ImageView fitWidth="380" preserveRatio="true">
+                                <image>
+                                    <Image url="@graphicResources/imagenes/botonVolver.png"/>
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <!-- Botón Crear Cuenta -->
+                    <Button fx:id="btnCrearCuenta"
+                            style="-fx-background-color: transparent; -fx-padding: 0;">
+                        <graphic>
+                            <ImageView fitWidth="380" preserveRatio="true">
+                                <image>
+                                    <Image url="@graphicResources/imagenes/btnRegistro.png"/>
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    
+
+                </HBox>
+
+            </VBox>
+        </bottom>
+
+    </BorderPane>
+
+</StackPane>

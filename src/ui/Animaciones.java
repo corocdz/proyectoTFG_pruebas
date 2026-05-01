@@ -1,0 +1,149 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package ui;
+
+/**
+ *
+ * @author coro
+ */
+import javafx.animation.*;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
+
+public class Animaciones {
+
+    public static void animarLogo(ImageView logo) {
+
+        RotateTransition rot = new RotateTransition(Duration.seconds(2), logo);
+        rot.setFromAngle(0);
+        rot.setToAngle(8);
+        rot.setAutoReverse(true);
+        rot.setCycleCount(Animation.INDEFINITE);
+
+        ScaleTransition scale = new ScaleTransition(Duration.seconds(2), logo);
+        scale.setFromX(1.0);
+        scale.setFromY(1.0);
+        scale.setToX(1.08);
+        scale.setToY(1.08);
+        scale.setAutoReverse(true);
+        scale.setCycleCount(Animation.INDEFINITE);
+
+        new ParallelTransition(rot, scale).play();
+    }
+
+    public static void animarBoton(Button boton) {
+
+        boton.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), boton);
+            st.setToX(1.08);
+            st.setToY(1.08);
+
+            FadeTransition ft = new FadeTransition(Duration.millis(150), boton);
+            ft.setToValue(0.85);
+
+            new ParallelTransition(st, ft).play();
+        });
+
+        boton.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), boton);
+            st.setToX(1.0);
+            st.setToY(1.0);
+
+            FadeTransition ft = new FadeTransition(Duration.millis(150), boton);
+            ft.setToValue(1.0);
+
+            new ParallelTransition(st, ft).play();
+        });
+    }
+
+    public static void animarLabelGeneral(Label label) {
+
+        // Pulse (latido)
+        ScaleTransition pulse = new ScaleTransition(Duration.seconds(2), label);
+        pulse.setFromX(1.0);
+        pulse.setFromY(1.0);
+        pulse.setToX(1.05);
+        pulse.setToY(1.05);
+        pulse.setAutoReverse(true);
+        pulse.setCycleCount(Animation.INDEFINITE);
+
+        // Float (flotar)
+        TranslateTransition floatAnim = new TranslateTransition(Duration.seconds(3), label);
+        floatAnim.setFromY(0);
+        floatAnim.setToY(-6);
+        floatAnim.setAutoReverse(true);
+        floatAnim.setCycleCount(Animation.INDEFINITE);
+
+        new ParallelTransition(pulse, floatAnim).play();
+    }
+
+    public static void animarLabelSecundario(Label label) {
+
+        // Posición base (la que tú le des en FXML o con setTranslateX antes)
+        double baseX = label.getTranslateX();
+        double baseY = label.getTranslateY();
+
+        Timeline orbita = new Timeline(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(label.translateXProperty(), baseX),
+                        new KeyValue(label.translateYProperty(), baseY)
+                ),
+                new KeyFrame(Duration.seconds(0.4),
+                        new KeyValue(label.translateXProperty(), baseX - 6),
+                        new KeyValue(label.translateYProperty(), baseY - 3)
+                ),
+                new KeyFrame(Duration.seconds(0.8),
+                        new KeyValue(label.translateXProperty(), baseX),
+                        new KeyValue(label.translateYProperty(), baseY - 6)
+                ),
+                new KeyFrame(Duration.seconds(1.2),
+                        new KeyValue(label.translateXProperty(), baseX + 6),
+                        new KeyValue(label.translateYProperty(), baseY - 3)
+                ),
+                new KeyFrame(Duration.seconds(1.6),
+                        new KeyValue(label.translateXProperty(), baseX),
+                        new KeyValue(label.translateYProperty(), baseY)
+                )
+        );
+        orbita.setCycleCount(Animation.INDEFINITE);
+        orbita.setAutoReverse(false);
+
+        ScaleTransition pulse = new ScaleTransition(Duration.seconds(1.6), label);
+        pulse.setFromX(1.0);
+        pulse.setFromY(1.0);
+        pulse.setToX(1.10);
+        pulse.setToY(1.10);
+        pulse.setAutoReverse(true);
+        pulse.setCycleCount(Animation.INDEFINITE);
+
+        RotateTransition rot = new RotateTransition(Duration.seconds(1.6), label);
+        rot.setFromAngle(-3);
+        rot.setToAngle(3);
+        rot.setAutoReverse(true);
+        rot.setCycleCount(Animation.INDEFINITE);
+
+        new ParallelTransition(orbita, pulse, rot).play();
+    }
+    
+    public static void mostrarError(StackPane root, String mensaje) {
+        try {
+            FXMLLoader loader = new FXMLLoader(Animaciones.class.getResource("/ui/popUpError.fxml"));
+            StackPane popup = loader.load();
+
+            PopUpErrorController controller = loader.getController();
+            controller.setMensaje(mensaje);
+
+            root.getChildren().add(popup);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+}

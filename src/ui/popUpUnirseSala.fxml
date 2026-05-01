@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="ui.PopUpUnirseController"
+           fx:id="rootPopup"
+           style="-fx-background-color: rgba(0,0,0,0.6);">
+
+    <VBox fx:id="popupBox"
+          alignment="CENTER"
+          spacing="25"
+          style="-fx-background-color: #1e1e1e;
+                 -fx-background-radius: 20;
+                 -fx-padding: 30;">
+
+        <ImageView fx:id="imgTitulo"
+                   fitWidth="320"
+                   preserveRatio="true"/>
+
+        <Label fx:id="lblTexto"
+               text="%popUpUnirseSala.titulo"
+               style="-fx-text-fill: white;
+                      -fx-font-size: 20px;
+                      -fx-font-weight: bold;"/>
+
+        <TextField fx:id="txtCodigo"
+                   promptText="%popUpUnirseSala.codigo"
+                   style="-fx-font-size: 18px;
+                          -fx-background-radius: 10;
+                          -fx-padding: 8;"/>
+
+        <PasswordField fx:id="txtPassword"
+                       promptText="%popUpUnirseSala.password"
+                       style="-fx-font-size: 18px;
+                              -fx-background-radius: 10;
+                              -fx-padding: 8;"/>
+
+        <HBox alignment="CENTER" spacing="40">
+
+            <Button fx:id="btnCancelar"
+                    onAction="#onCancelar"
+                    style="-fx-background-color: transparent; -fx-padding: 0;">
+                <graphic>
+                    <ImageView fx:id="imgCancelar"
+                               fitWidth="200"
+                               preserveRatio="true"/>
+                </graphic>
+            </Button>
+
+            <Button fx:id="btnUnirse"
+                    onAction="#onUnirse"
+                    style="-fx-background-color: transparent; -fx-padding: 0;">
+                <graphic>
+                    <ImageView fx:id="imgUnirse"
+                               fitWidth="200"
+                               preserveRatio="true"/>
+                </graphic>
+            </Button>
+
+        </HBox>
+
+    </VBox>
+
+</StackPane>
+

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="ui.LoginController"
+           fx:id="rootLogin"
+           stylesheets="@graphicResources/login.css">
+
+    <BorderPane>
+
+        <top>
+            <VBox alignment="CENTER" spacing="10" >
+                <padding>
+                    <Insets top="50" right="0" bottom="0" left="0"/>
+                </padding>
+                <Label fx:id="tituloBienvenida"
+                       text="%login.bienvenida"
+                       styleClass="tituloBienvenida"/>
+
+                <ImageView fx:id="logoImage" fitWidth="600" preserveRatio="true" />
+            </VBox>
+        </top>
+
+        <center>
+            <VBox spacing="25" alignment="CENTER">
+                <Label fx:id="tituloLogin"
+                       text="%login.subtitulo"/>
+
+                <TextField fx:id="txtEmail"
+                           promptText="%login.email"
+                           prefWidth="350"
+                           maxWidth="600"/>
+
+                <PasswordField fx:id="txtPassword"
+                               promptText="%login.password"
+                               prefWidth="350"
+                               maxWidth="600"/>
+
+                <HBox spacing="10" alignment="CENTER">
+                    <Button fx:id="btnLoginJ1" text="Login Jugador1"/>
+                    <Button fx:id="btnLoginJ2" text="Login Jugador2"/>
+                    <Button fx:id="btnLoginJ3" text="Login Jugador3"/>
+                    <Button fx:id="btnLoginJ4" text="Login Jugador4"/>
+                </HBox>
+            </VBox>
+        </center>
+
+        <bottom>
+            <VBox spacing="5">
+
+                <HBox alignment="CENTER">
+                    <Region/>
+                    <Label fx:id="textoRegistro"
+                           text="%login.crearCuentaTexto"
+                           styleClass="textoRegistro"
+                           translateX="-215"/>
+                    <Region/>
+                </HBox>
+
+                <HBox spacing="40" alignment="CENTER">
+                    <padding>
+                        <Insets top="20" bottom="80"/>
+                    </padding>
+
+                    <Button fx:id="btnRegistro" style="-fx-background-color: transparent; -fx-padding: 0;">
+                        <graphic>
+                            <ImageView fitWidth="380" preserveRatio="true">
+                                <image>
+                                    <Image url="@graphicResources/imagenes/btnRegistro.png"/>
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="btnLogin" style="-fx-background-color: transparent; -fx-padding: 0;">
+                        <graphic>
+                            <ImageView fitWidth="380" preserveRatio="true">
+                                <image>
+                                    <Image url="@graphicResources/imagenes/btnIniciarSesion.png"/>
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
+            </VBox>
+        </bottom>
+
+    </BorderPane>
+</StackPane>

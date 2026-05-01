@@ -1,0 +1,128 @@
+@font-face {
+    font-family: "Minecraft";
+    src: url("fonts/Minecraft.ttf");
+}
+
+/* Fondo general del contenido */
+#rootSala {
+    -fx-background-color: rgba(255, 105, 180, 0.35);
+}
+
+/* Código de sala */
+#tituloSala {
+    -fx-font-size: 70px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+
+    /* TRAZADO ROSA OSCURO MUY MARCADO */
+    /* Contorno grueso simulado con doble sombra */
+    -fx-effect: dropshadow(gaussian, rgba(120, 0, 60, 1), 12, 0.9, 0, 0),
+        dropshadow(gaussian, rgba(120, 0, 60, 1), 12, 0.9, 0, 0),
+        dropshadow(gaussian, rgba(255, 105, 180, 0.6), 25, 0.4, 0, 0);
+}
+
+/* Títulos */
+.label {
+    -fx-font-family: "Minecraft";
+    -fx-font-size: 40px;
+    -fx-text-fill: white;
+
+    /* Contorno rosado oscuro grueso */
+    -fx-effect: dropshadow(gaussian, rgba(120, 0, 60, 1), 6, 0.5, 0, 0),
+        dropshadow(gaussian, rgba(255, 105, 180, 0.6), 15, 0.3, 0, 0);
+}
+
+
+/* Código de sala */
+#lblCodigoSala {
+    -fx-font-size: 50px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+
+    -fx-effect: dropshadow(gaussian, rgba(120, 0, 60, 1), 6, 0.5, 0, 0),
+        dropshadow(gaussian, rgba(255, 105, 180, 0.6), 15, 0.3, 0, 0);
+
+}
+
+/* Lista de jugadores */
+#listaJugadores {
+    -fx-background-color: rgba(180, 30, 90, 0.55); /* rosa oscuro */
+    -fx-control-inner-background: rgba(150, 20, 70, 0.45); /* interior más oscuro */
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: rgba(255, 255, 255, 0.35); /* borde suave blanco */
+    -fx-text-fill: white;
+}
+
+.list-cell {
+    -fx-font-family: "Minecraft";
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+
+    -fx-background-color: rgba(255, 105, 180, 0.25);
+    -fx-background-radius: 8;
+    -fx-padding: 8;
+    -fx-effect: innershadow(gaussian, rgba(120,0,60,0.4), 4, 0.3, 0, 0);
+}
+
+/* Hover */
+.list-cell:hover {
+    -fx-background-color: rgba(255, 105, 180, 0.45);
+}
+
+/* Selección */
+.list-cell:selected {
+    -fx-background-color: rgba(255, 0, 120, 0.6);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+
+/* ComboBox */
+.combo-box {
+    -fx-background-color: rgba(0,0,0,0.35);
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+}
+
+.combo-box {
+    -fx-font-family: "Minecraft";
+    -fx-font-size: 26px;
+    -fx-text-fill: white;
+
+    -fx-background-color: rgba(0,0,0,0.35);
+    -fx-background-radius: 10;
+}
+
+/* Estilo del popup (las opciones del menú) */
+.combo-box .list-cell {
+    -fx-font-family: "Minecraft";
+    -fx-font-size: 24px;
+    -fx-text-fill: white;
+
+    /* Fondo más oscuro para que el texto destaque */
+    -fx-background-color: rgba(80, 0, 40, 0.65);
+    -fx-background-radius: 8;
+
+    /* Contorno suave del texto */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 4, 0.3, 0, 0);
+}
+
+
+.combo-box .list-cell:hover {
+    -fx-background-color: rgba(255, 105, 180, 0.55);
+}
+
+.combo-box .list-cell:selected {
+    -fx-background-color: rgba(255, 0, 120, 0.75);
+    -fx-font-weight: bold;
+}
+
+/* Botones */
+.button {
+    -fx-background-radius: 10;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+
