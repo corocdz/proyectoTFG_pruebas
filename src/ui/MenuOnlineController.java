@@ -22,9 +22,12 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import i18n.IdiomaManager;
 import java.util.ResourceBundle;
+import ui.audio.ButtonSound;
 
 public class MenuOnlineController {
 
+    @FXML
+    private Button btnIdioma;
     @FXML
     private Button btnCrearSala;
     @FXML
@@ -38,11 +41,21 @@ public class MenuOnlineController {
     @FXML
     private ImageView logoImage;
     @FXML
+    private ImageView btnCrearSalaImage;
+    @FXML
+    private ImageView btnIdiomaImage;
+    @FXML
+    private ImageView btnUnirseSalaImage;
+    @FXML
+    private ImageView btnVolverImage;
+    @FXML
     private StackPane rootMenu;
     @FXML
     private Pane overlayOscuro;
 
     private final ResourceBundle bundle = IdiomaManager.getBundle();
+    
+    private final FirebaseDatabaseService dbService = new FirebaseDatabaseService();
 
     @FXML
     private void initialize() {
@@ -52,6 +65,13 @@ public class MenuOnlineController {
                 getClass().getResource("/ui/graphicResources/imagenes/tokaledaCardsGame.png").toExternalForm()
         ));
 
+        btnIdiomaImage.setImage(IdiomaManager.cargarImagen("btnIdioma"));
+        btnCrearSalaImage.setImage(IdiomaManager.cargarImagen("btnCrearSala"));
+        btnUnirseSalaImage.setImage(IdiomaManager.cargarImagen("btnUnirseSala"));
+        btnVolverImage.setImage(IdiomaManager.cargarImagen("btnVolver"));
+
+        btnIdioma.setOnAction(e -> cambiarIdioma());
+
         Animaciones.animarLogo(logoImage);
 
         Animaciones.animarBoton(btnCrearSala);
@@ -59,10 +79,19 @@ public class MenuOnlineController {
         Animaciones.animarBoton(btnVolver);
         Animaciones.animarBoton(btnOpciones);
         Animaciones.animarBoton(btnSalir);
+        Animaciones.animarBoton(btnIdioma);
+        
+        ButtonSound.activar(btnCrearSala);
+        ButtonSound.activar(btnUnirseSala);
+        ButtonSound.activar(btnVolver);
+        ButtonSound.activar(btnOpciones);
+        ButtonSound.activar(btnSalir);
+        ButtonSound.activar(btnIdioma);
 
         btnCrearSala.setOnAction(e -> mostrarPopupCrearSala());
         btnUnirseSala.setOnAction(e -> mostrarPopupUnirseSala());
         btnVolver.setOnAction(e -> MainApp.cambiarEscena("menuPrincipal.fxml", 800, 600));
+        btnOpciones.setOnAction(e -> Animaciones.mostrarPopupSonido(rootMenu));
         btnSalir.setOnAction(e -> {
             MainApp.desconectarUsuario();
             Platform.exit();
@@ -375,4 +404,28 @@ public class MenuOnlineController {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+
+    private void cambiarIdioma() {
+
+        String langActual = IdiomaManager.getCodigoIdioma();
+        String nuevo = langActual.equals("es") ? "en" : "es";
+
+        // Guardar idioma en memoria
+        IdiomaManager.setIdioma(nuevo);
+
+        // Guardar idioma en Firebase si el usuario ya está logueado
+        if (MainApp.usuarioActualUID != null && MainApp.usuarioActualToken != null) {
+            try {
+                Map<String, Object> cambios = new HashMap<>();
+                cambios.put("idioma", nuevo);
+                dbService.actualizarCamposUsuario(MainApp.usuarioActualUID, cambios, MainApp.usuarioActualToken);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        // Recargar escena
+        MainApp.cambiarEscena("menuOnline.fxml", 800, 600);
+    }
+
 }

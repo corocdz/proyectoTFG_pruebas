@@ -15,17 +15,56 @@
     <BorderPane>
 
         <top>
-            <VBox alignment="CENTER" spacing="10" >
-                <padding>
-                    <Insets top="50" right="0" bottom="0" left="0"/>
-                </padding>
-                <Label fx:id="tituloBienvenida"
-                       text="%login.bienvenida"
-                       styleClass="tituloBienvenida"/>
+            <StackPane>
 
-                <ImageView fx:id="logoImage" fitWidth="600" preserveRatio="true" />
-            </VBox>
+                <!-- CONTENIDO ORIGINAL (centrado) -->
+                <VBox alignment="CENTER" spacing="10">
+                    <padding>
+                        <Insets top="50" right="0" bottom="0" left="0"/>
+                    </padding>
+
+                    <Label fx:id="tituloBienvenida"
+                           text="%login.bienvenida"
+                           styleClass="tituloBienvenida"/>
+
+                    <ImageView fx:id="logoImage" fitWidth="600" preserveRatio="true" />
+                </VBox>
+
+                <!-- BOTÓN OPCIONES (arriba derecha, un poco más a la izquierda) -->
+                <Button fx:id="botonOpciones"
+                        pickOnBounds="false"
+                        style="-fx-background-color: transparent;"
+                        StackPane.alignment="TOP_RIGHT"
+                        translateX="-90" translateY="20">
+                    <graphic>
+                        <ImageView fx:id="botonOpcionesImage" fitWidth="60" preserveRatio="true">
+                            <image>
+                                <Image url="@graphicResources/imagenes/botonOpciones.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+
+                <!-- BOTÓN IDIOMA (arriba derecha, como antes) -->
+                <Button fx:id="btnIdioma"
+                        pickOnBounds="false"
+                        style="-fx-background-color: transparent;"
+                        StackPane.alignment="TOP_RIGHT"
+                        translateX="-20" translateY="20">
+                    <graphic>
+                        <ImageView fx:id="btnIdiomaImage" fitWidth="60" preserveRatio="true">
+                            <image>
+                                <Image url="@graphicResources/imagenes/btnIdioma.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+
+            </StackPane>
         </top>
+
+
+
 
         <center>
             <VBox spacing="25" alignment="CENTER">
@@ -70,7 +109,7 @@
 
                     <Button fx:id="btnRegistro" style="-fx-background-color: transparent; -fx-padding: 0;">
                         <graphic>
-                            <ImageView fitWidth="380" preserveRatio="true">
+                            <ImageView fx:id="btnRegistroImage" fitWidth="380" preserveRatio="true">
                                 <image>
                                     <Image url="@graphicResources/imagenes/btnRegistro.png"/>
                                 </image>
@@ -80,7 +119,7 @@
 
                     <Button fx:id="btnLogin" style="-fx-background-color: transparent; -fx-padding: 0;">
                         <graphic>
-                            <ImageView fitWidth="380" preserveRatio="true">
+                            <ImageView fx:id="btnIniciarSesionImage" fitWidth="380" preserveRatio="true">
                                 <image>
                                     <Image url="@graphicResources/imagenes/btnIniciarSesion.png"/>
                                 </image>

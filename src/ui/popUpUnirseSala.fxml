@@ -18,7 +18,7 @@
                  -fx-background-radius: 20;
                  -fx-padding: 30;">
 
-        <ImageView fx:id="imgTitulo"
+        <ImageView fx:id="popUpCrearSalaImagen"
                    fitWidth="320"
                    preserveRatio="true"/>
 
@@ -46,7 +46,7 @@
                     onAction="#onCancelar"
                     style="-fx-background-color: transparent; -fx-padding: 0;">
                 <graphic>
-                    <ImageView fx:id="imgCancelar"
+                    <ImageView fx:id="btnCancelarImage"
                                fitWidth="200"
                                preserveRatio="true"/>
                 </graphic>
@@ -56,7 +56,7 @@
                     onAction="#onUnirse"
                     style="-fx-background-color: transparent; -fx-padding: 0;">
                 <graphic>
-                    <ImageView fx:id="imgUnirse"
+                    <ImageView fx:id="btnUnirseImage"
                                fitWidth="200"
                                preserveRatio="true"/>
                 </graphic>

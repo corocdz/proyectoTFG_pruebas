@@ -16,10 +16,12 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import ui.audio.MusicManager;
 
 public class MainApp extends Application {
 
@@ -30,19 +32,24 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        primaryStage = stage;
 
-        // 1. Cargar idioma guardado (por ahora siempre "es")
-        IdiomaManager.setIdioma("en");
+        primaryStage = stage;
 
         // 2. Cargar el FXML con ResourceBundle
         FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
         loader.setResources(IdiomaManager.getBundle());
         Parent root = loader.load();
-        
+
         primaryStage.setTitle("Tokaleda Cards Game");
         primaryStage.setScene(new Scene(root, 600, 400));
+
+        primaryStage.getIcons().add(new Image(
+                getClass().getResourceAsStream("/ui/graphicResources/imagenes/logoApp.png")
+        ));
+
         primaryStage.show();
+
+        MusicManager.playMenuMusic();
 
         Platform.setImplicitExit(true);
 
@@ -51,44 +58,44 @@ public class MainApp extends Application {
     public static Object cambiarEscena(String fxml, int width, int height) {
         try {
             FXMLLoader loader = new FXMLLoader(MainApp.class.getResource(fxml));
-            // AÑADIR ESTO
             loader.setResources(IdiomaManager.getBundle());
-            
-            Parent root = loader.load();
 
+            Parent root = loader.load();
             Object controller = loader.getController();
 
             // Cambiar escena
             Scene scene = new Scene(root, width, height);
             primaryStage.setScene(scene);
-            //aplicarSlideTransition(root, width);
-
-            // Mostrar ventana
             primaryStage.show();
 
-            // Si es la sala, guardamos el controlador
+            // Si es sala, guardamos el controlador
             if (controller instanceof SalaOnlineController) {
                 controladorSalaActual = (SalaOnlineController) controller;
             } else {
                 controladorSalaActual = null;
             }
 
-            // SI ES LA PARTIDA → FULLSCREEN + CENTRADO + REFRESCO
-            if (controller instanceof PartidaController) {
+            System.out.println(">>> Controlador cargado: " + controller.getClass().getName());
 
-                // FULLSCREEN REAL
-                primaryStage.setFullScreenExitHint(""); // sin mensaje
+            // ⭐ SI ES PARTIDA (cualquier modo) ⭐
+            if (controller instanceof PartidaControllerBase) {
+                System.out.println(">>> ENTRANDO EN PARTIDA: " + controller.getClass().getName());
+                // SOLO cambiar música si no está ya sonando la de partida
+                if (!MusicManager.isPlaying("partida")) {
+                    System.out.println(">>> CAMBIANDO A MÚSICA DE PARTIDA");
+                    MusicManager.playPartidaMusic();
+                }
+
+                // FULLSCREEN
+                primaryStage.setFullScreenExitHint("");
                 primaryStage.setFullScreenExitKeyCombination(
                         new KeyCodeCombination(KeyCode.ESCAPE)
                 );
                 primaryStage.setFullScreen(true);
 
-                PartidaController pc = (PartidaController) controller;
+                PartidaControllerBase pc = (PartidaControllerBase) controller;
 
-                // Inicializar partida
                 pc.init(SalaContext.codigoSalaActual, MainApp.usuarioActualUID, MainApp.usuarioActualToken);
-
-                // CENTRAR TODAS LAS ZONAS DE LA PANTALLA
                 pc.configurarLayoutEscena(primaryStage);
 
                 // REFRESCO DE PARTIDA
@@ -108,7 +115,6 @@ public class MainApp extends Application {
                                     List<String> descarte = (List<String>) partida.get("descarte");
 
                                     pc.actualizarDesdeModelo(manos, baraja, descarte);
-
                                 }
 
                             } catch (Exception ex) {
@@ -119,6 +125,13 @@ public class MainApp extends Application {
 
                 timeline.setCycleCount(Animation.INDEFINITE);
                 timeline.play();
+
+            } else {
+
+                // ⭐ SI NO ES PARTIDA → MÚSICA GENERAL ⭐
+                if (!MusicManager.isPlaying("menu")) {
+                    MusicManager.playMenuMusic();
+                }
             }
 
             return controller;

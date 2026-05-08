@@ -9,7 +9,6 @@
 <StackPane fx:id="rootSala"
            xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="ui.PartidaController"
            stylesheets="@graphicResources/partida.css">
 
     <!-- ========================= -->

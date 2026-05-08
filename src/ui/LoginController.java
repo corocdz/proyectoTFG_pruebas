@@ -7,11 +7,15 @@ import java.util.Map;
 import javafx.fxml.FXML;
 import i18n.IdiomaManager;
 import java.util.ResourceBundle;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import ui.MainApp;
+import ui.audio.ButtonSound;
+import ui.audio.SoundManager;
 
 public class LoginController {
 
@@ -32,14 +36,26 @@ public class LoginController {
     @FXML
     private Button btnLoginJ4;
     @FXML
+    private Button botonOpciones;
+    @FXML
+    private ImageView botonOpcionesImage;
+    @FXML
     private ImageView logoImage;
+    @FXML
+    private ImageView btnRegistroImage;
+    @FXML
+    private ImageView btnIniciarSesionImage;
+    @FXML
+    private ImageView btnIdiomaImage;
+    @FXML
+    private Button btnIdioma;
     @FXML
     private Label tituloBienvenida;
     @FXML
     private Label textoRegistro;
     @FXML
     private StackPane rootLogin;
-    
+
     private final ResourceBundle bundle = IdiomaManager.getBundle();
 
     private final FirebaseAuthService authService = new FirebaseAuthService();
@@ -48,19 +64,33 @@ public class LoginController {
     @FXML
     private void initialize() {
 
-        // Cargar imagen
+        // Cargar imagen del logo
         logoImage.setImage(new Image(
                 getClass().getResource("/ui/graphicResources/imagenes/tokaledaCardsGame.png").toExternalForm()
         ));
+
+        btnIdiomaImage.setImage(IdiomaManager.cargarImagen("btnIdioma"));
+        btnRegistroImage.setImage(IdiomaManager.cargarImagen("btnRegistro"));
+        btnIniciarSesionImage.setImage(IdiomaManager.cargarImagen("btnIniciarSesion"));
 
         Animaciones.animarLogo(logoImage);
         Animaciones.animarLabelGeneral(tituloBienvenida);
         Animaciones.animarLabelSecundario(textoRegistro);
         Animaciones.animarBoton(btnLogin);
         Animaciones.animarBoton(btnRegistro);
+        Animaciones.animarBoton(botonOpciones);
+        Animaciones.animarBoton(btnIdioma);
+
+        // Hover sonoro (después o antes, da igual si usas addEventHandler)
+        ButtonSound.activar(btnIdioma);
+        ButtonSound.activar(btnRegistro);
+        ButtonSound.activar(btnLogin);
+        ButtonSound.activar(botonOpciones);      
 
         btnLogin.setOnAction(e -> login());
         btnRegistro.setOnAction(e -> MainApp.cambiarEscena("registro.fxml", 600, 400));
+        btnIdioma.setOnAction(e -> cambiarIdioma());
+        botonOpciones.setOnAction(e -> Animaciones.mostrarPopupSonido(rootLogin));
 
         btnLoginJ1.setOnAction(e -> loginRapido("jugador1@test.com", "123456"));
         btnLoginJ2.setOnAction(e -> loginRapido("jugador2@test.com", "123456"));
@@ -98,6 +128,11 @@ public class LoginController {
             if (nodoJson != null && !nodoJson.equals("null")) {
                 Map<String, Object> datosExistentes = new com.google.gson.Gson().fromJson(nodoJson, Map.class);
                 if (datosExistentes != null) {
+                    // Cargar idioma del usuario
+                    Object idioma = datosExistentes.get("idioma");
+                    if (idioma != null) {
+                        IdiomaManager.setIdioma(idioma.toString());
+                    }
                     Object conectado = datosExistentes.get("conectado");
                     if (conectado != null && Boolean.TRUE.equals(conectado)) {
                         yaConectado = true;
@@ -123,6 +158,7 @@ public class LoginController {
                 cambios.put("email", email);
                 cambios.put("nombre", "Usuario");
                 cambios.put("avatar", "default.png");
+                cambios.put("idioma", IdiomaManager.getCodigoIdioma());
             }
 
             // 4. Fusionar y guardar
@@ -181,11 +217,15 @@ public class LoginController {
             cambios.put("conectado", true);
             cambios.put("ultimaConexion", System.currentTimeMillis());
 
+            // SIEMPRE actualizar idioma al iniciar sesión
+            cambios.put("idioma", IdiomaManager.getCodigoIdioma());
+
             // Si el nodo no existía, crear datos básicos
             if (nodoJson == null || nodoJson.equals("null")) {
                 cambios.put("email", email);
                 cambios.put("nombre", "Usuario");
                 cambios.put("avatar", "default.png");
+                cambios.put("idioma", IdiomaManager.getCodigoIdioma());
             }
 
             // 6. Guardar cambios en Firebase
@@ -196,8 +236,31 @@ public class LoginController {
             System.out.println("UID en login rápido: " + uid);
 
         } catch (Exception ex) {
-            Animaciones.mostrarError(rootLogin, bundle.getString("loginController.error.rapido")+ ex.getMessage());
+            Animaciones.mostrarError(rootLogin, bundle.getString("loginController.error.rapido") + ex.getMessage());
         }
     }
+
+    private void cambiarIdioma() {
+
+        String langActual = IdiomaManager.getCodigoIdioma();
+        String nuevo = langActual.equals("es") ? "en" : "es";
+
+        // Guardar idioma en memoria
+        IdiomaManager.setIdioma(nuevo);
+
+        // Guardar idioma en Firebase si el usuario ya está logueado
+        if (MainApp.usuarioActualUID != null && MainApp.usuarioActualToken != null) {
+            try {
+                Map<String, Object> cambios = new HashMap<>();
+                cambios.put("idioma", nuevo);
+                dbService.actualizarCamposUsuario(MainApp.usuarioActualUID, cambios, MainApp.usuarioActualToken);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        // Recargar escena
+        MainApp.cambiarEscena("login.fxml", 800, 600);
+    }   
 
 }

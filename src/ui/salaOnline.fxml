@@ -8,15 +8,13 @@
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.effect.GaussianBlur?>
 
-
-<!-- ROOT: StackPane para permitir fondo + contenido -->
 <StackPane fx:id="rootSala"
            xmlns="http://javafx.com/javafx/17"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="ui.SalaOnlineController"
            stylesheets="@graphicResources/salaOnline.css">
 
-    <!-- FONDO (imagen o color) -->
+    <!-- FONDO -->
     <ImageView fx:id="imgLogoFondo"
                fitWidth="1000"
                preserveRatio="true"
@@ -51,7 +49,6 @@
                        alignment="CENTER"
                        maxWidth="Infinity"/>
             </VBox>
-
         </top>
 
         <!-- PARTE CENTRAL -->
@@ -87,29 +84,46 @@
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>
 
-                <Button fx:id="btnSalir" style="-fx-background-color: transparent; -fx-padding: 0;">
+                <Button fx:id="btnSalir" pickOnBounds="false"
+                        style="-fx-background-color: transparent; -fx-padding: 0;">
                     <graphic>
-                        <ImageView fitWidth="380" preserveRatio="true">
+                        <ImageView fx:id="btnSalirImage" fitWidth="380" preserveRatio="true">
                             <image>
                                 <Image url="@graphicResources/imagenes/btnSalir.png"/>
                             </image>
                         </ImageView>
                     </graphic>
-                </Button>               
+                </Button>
 
-                <Button fx:id="btnIniciar" style="-fx-background-color: transparent; -fx-padding: 0;">
+                <Button fx:id="btnIniciar" pickOnBounds="false"
+                        style="-fx-background-color: transparent; -fx-padding: 0;">
                     <graphic>
-                        <ImageView fitWidth="380" preserveRatio="true">
+                        <ImageView fx:id="btnIniciarImage" fitWidth="380" preserveRatio="true">
                             <image>
                                 <Image url="@graphicResources/imagenes/btnIniciar.png"/>
                             </image>
                         </ImageView>
                     </graphic>
                 </Button>
-                
+
             </HBox>
         </bottom>
 
     </BorderPane>
+    
+    <!-- ⭐ BOTÓN OPCIONES FLOTANTE EN ESQUINA SUPERIOR DERECHA ⭐ -->
+    <Button fx:id="botonOpciones"
+            pickOnBounds="false"
+            style="-fx-background-color: transparent;"
+            StackPane.alignment="TOP_RIGHT"
+            translateX="-20" translateY="20">
+        <graphic>
+            <ImageView fx:id="botonOpcionesImage" fitWidth="60" preserveRatio="true">
+                <image>
+                    <Image url="@graphicResources/imagenes/botonOpciones.png"/>
+                </image>
+            </ImageView>
+        </graphic>
+    </Button>
 
 </StackPane>

@@ -8,8 +8,10 @@ package ui;
  *
  * @author coro
  */
+import i18n.IdiomaManager;
 import javafx.animation.*;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -39,7 +41,7 @@ public class Animaciones {
 
     public static void animarBoton(Button boton) {
 
-        boton.setOnMouseEntered(e -> {
+        boton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_ENTERED, e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), boton);
             st.setToX(1.08);
             st.setToY(1.08);
@@ -50,7 +52,7 @@ public class Animaciones {
             new ParallelTransition(st, ft).play();
         });
 
-        boton.setOnMouseExited(e -> {
+        boton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_EXITED, e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), boton);
             st.setToX(1.0);
             st.setToY(1.0);
@@ -60,6 +62,19 @@ public class Animaciones {
 
             new ParallelTransition(st, ft).play();
         });
+    }
+
+    public static void animarPress(Node nodo) {
+        ScaleTransition stDown = new ScaleTransition(Duration.millis(80), nodo);
+        stDown.setToX(0.95);
+        stDown.setToY(0.95);
+
+        ScaleTransition stUp = new ScaleTransition(Duration.millis(80), nodo);
+        stUp.setToX(1.0);
+        stUp.setToY(1.0);
+
+        SequentialTransition seq = new SequentialTransition(stDown, stUp);
+        seq.play();
     }
 
     public static void animarLabelGeneral(Label label) {
@@ -130,15 +145,30 @@ public class Animaciones {
 
         new ParallelTransition(orbita, pulse, rot).play();
     }
-    
+
     public static void mostrarError(StackPane root, String mensaje) {
         try {
             FXMLLoader loader = new FXMLLoader(Animaciones.class.getResource("/ui/popUpError.fxml"));
+            loader.setResources(IdiomaManager.getBundle()); // ← NECESARIO PARA TRADUCCIÓN
+
             StackPane popup = loader.load();
 
             PopUpErrorController controller = loader.getController();
             controller.setMensaje(mensaje);
 
+            root.getChildren().add(popup);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void mostrarPopupSonido(StackPane root) {
+        try {
+            FXMLLoader loader = new FXMLLoader(Animaciones.class.getResource("/ui/popUpSonido.fxml"));
+            loader.setResources(IdiomaManager.getBundle());
+
+            StackPane popup = loader.load();
             root.getChildren().add(popup);
 
         } catch (Exception e) {

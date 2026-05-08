@@ -1,7 +1,9 @@
 package ui;
 
+import i18n.IdiomaManager;
 import javafx.animation.*;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -10,15 +12,19 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import ui.audio.ButtonSound;
 
 public class PopUpUnirseController {
 
     @FXML private StackPane rootPopup;
     @FXML private VBox popupBox;
 
-    @FXML private ImageView imgTitulo;
-    @FXML private ImageView imgUnirse;
-    @FXML private ImageView imgCancelar;
+    @FXML private ImageView popUpCrearSalaImagen;
+    @FXML private ImageView btnUnirseImage;
+    @FXML private ImageView btnCancelarImage;
+    
+    @FXML private Button btnUnirse;
+    @FXML private Button btnCancelar;
 
     @FXML private TextField txtCodigo;
     @FXML private PasswordField txtPassword;
@@ -31,16 +37,18 @@ public class PopUpUnirseController {
     @FXML
     private void initialize() {
 
-        imgTitulo.setImage(new Image(getClass().getResource(
-                "/ui/graphicResources/imagenes/popUpCrearSalaImagen.png").toExternalForm()));
-
-        imgUnirse.setImage(new Image(getClass().getResource(
-                "/ui/graphicResources/imagenes/btnUnirse.png").toExternalForm()));
-
-        imgCancelar.setImage(new Image(getClass().getResource(
-                "/ui/graphicResources/imagenes/btnCancelar.png").toExternalForm()));
+        popUpCrearSalaImagen.setImage(IdiomaManager.cargarImagen("popUpCrearSalaImagen"));
+        btnUnirseImage.setImage(IdiomaManager.cargarImagen("btnUnirse"));
+        btnCancelarImage.setImage(IdiomaManager.cargarImagen("btnCancelar"));
 
         animarEntrada();
+        
+        Animaciones.animarBoton(btnUnirse);
+        Animaciones.animarBoton(btnCancelar);
+        
+        ButtonSound.activar(btnCancelar);
+        ButtonSound.activar(btnUnirse);
+        
     }
 
     private void animarEntrada() {

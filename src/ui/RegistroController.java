@@ -11,7 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import ui.audio.ButtonSound;
+import ui.audio.SoundManager;
 
 public class RegistroController {
 
@@ -24,40 +27,63 @@ public class RegistroController {
     @FXML
     private PasswordField txtConfirmar;
     @FXML
-    private Button btnCrearCuenta;
+    private ImageView btnRegistroImage;
+    @FXML
+    private Button btnRegistro;
+    @FXML
+    private ImageView btnVolverImage;
+    @FXML
+    private Button botonOpciones;
+    @FXML
+    private ImageView botonOpcionesImage;
     @FXML
     private Button btnVolver;
     @FXML
     private ImageView logoImage;
+    @FXML
+    private ImageView btnIdiomaImage;
+    @FXML
+    private Button btnIdioma;    
     @FXML
     private Label tituloRegistro;
     @FXML
     private Label textoVolver;
     @FXML
     private StackPane rootRegistro;
-    
+
     private final ResourceBundle bundle = IdiomaManager.getBundle();
-    
+
     private final FirebaseAuthService authService = new FirebaseAuthService();
     private final FirebaseDatabaseService dbService = new FirebaseDatabaseService();
 
     @FXML
     private void initialize() {
-        
+
         // Cargar imagen
         logoImage.setImage(new Image(
                 getClass().getResource("/ui/graphicResources/imagenes/tokaledaCardsGame.png").toExternalForm()
-        ));
+        ));        
         
+        btnIdiomaImage.setImage(IdiomaManager.cargarImagen("btnIdioma"));
+        btnRegistroImage.setImage(IdiomaManager.cargarImagen("btnRegistro"));
+        btnVolverImage.setImage(IdiomaManager.cargarImagen("btnVolver"));
+                      
         Animaciones.animarLogo(logoImage);
         Animaciones.animarBoton(btnVolver);
-        Animaciones.animarBoton(btnCrearCuenta);
-        
+        Animaciones.animarBoton(btnRegistro);
         Animaciones.animarLabelGeneral(tituloRegistro);
         Animaciones.animarLabelSecundario(textoVolver);
+                
+        // Hover sonoro (después o antes, da igual si usas addEventHandler)
+        ButtonSound.activar(btnIdioma);
+        ButtonSound.activar(btnRegistro);
+        ButtonSound.activar(btnVolver);
+        ButtonSound.activar(botonOpciones);      
         
-        btnCrearCuenta.setOnAction(e -> registrar());
+        btnIdioma.setOnAction(e -> cambiarIdioma());  
+        btnRegistro.setOnAction(e -> registrar());
         btnVolver.setOnAction(e -> MainApp.cambiarEscena("login.fxml", 600, 400));
+        botonOpciones.setOnAction(e -> Animaciones.mostrarPopupSonido(rootRegistro));
     }
 
     private void registrar() {
@@ -67,7 +93,7 @@ public class RegistroController {
         String confirmar = txtConfirmar.getText().trim();
 
         if (nombre.isEmpty() || email.isEmpty() || password.isEmpty() || confirmar.isEmpty()) {
-           Animaciones.mostrarError(rootRegistro, bundle.getString("registroController.error.campos"));
+            Animaciones.mostrarError(rootRegistro, bundle.getString("registroController.error.campos"));
             return;
         }
 
@@ -99,7 +125,7 @@ public class RegistroController {
 
                 MainApp.cambiarEscena("menuPrincipal.fxml", 800, 600);
             } else {
-                Animaciones.mostrarError(rootRegistro,bundle.getString("registroController.error.registro"));
+                Animaciones.mostrarError(rootRegistro, bundle.getString("registroController.error.registro"));
             }
         } catch (Exception ex) {
             Animaciones.mostrarError(rootRegistro, bundle.getString("registroController.error.excepcion") + ex.getMessage());
@@ -113,4 +139,28 @@ public class RegistroController {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+    
+    private void cambiarIdioma() {
+
+        String langActual = IdiomaManager.getCodigoIdioma();
+        String nuevo = langActual.equals("es") ? "en" : "es";
+
+        // Guardar idioma en memoria
+        IdiomaManager.setIdioma(nuevo);
+
+        // Guardar idioma en Firebase si el usuario ya está logueado
+        if (MainApp.usuarioActualUID != null && MainApp.usuarioActualToken != null) {
+            try {
+                Map<String, Object> cambios = new HashMap<>();
+                cambios.put("idioma", nuevo);
+                dbService.actualizarCamposUsuario(MainApp.usuarioActualUID, cambios, MainApp.usuarioActualToken);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        // Recargar escena
+        MainApp.cambiarEscena("registro.fxml", 800, 600);
+    }        
+    
 }

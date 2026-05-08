@@ -47,7 +47,7 @@
 
 
         <Button fx:id="btnCerrar"
-                text="Cerrar"
+                text="%popUpError.mensaje"
                 style="-fx-font-family: 'Minecraft';
                        -fx-font-size: 22px;
                        -fx-background-color: #ff2fa1;

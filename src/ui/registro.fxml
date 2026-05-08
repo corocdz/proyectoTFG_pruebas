@@ -16,17 +16,47 @@
 
         <!-- ZONA SUPERIOR: TÍTULO + LOGO -->
         <top>
-            <VBox alignment="CENTER" spacing="10">
-                <padding>
-                    <Insets top="50" />
-                </padding>
+            <StackPane>
+                
+                <VBox alignment="CENTER" spacing="10">
+                    <padding>
+                        <Insets top="50" />
+                    </padding>
 
-                <Label fx:id="tituloRegistro"
-                       text="%registro.titulo"
-                       styleClass="tituloRegistro"/>
+                    <Label fx:id="tituloRegistro"
+                           text="%registro.titulo"
+                           styleClass="tituloRegistro"/>
 
-                <ImageView fx:id="logoImage" fitWidth="600" preserveRatio="true" />
-            </VBox>
+                    <ImageView fx:id="logoImage" fitWidth="600" preserveRatio="true" />
+                </VBox>
+                
+                <!-- BOTÓN DE IDIOMA (arriba a la derecha) -->
+                <Button fx:id="btnIdioma" style="-fx-background-color: transparent;" StackPane.alignment="TOP_RIGHT"
+                        translateX="-20" translateY="20">
+                    <graphic>
+                        <ImageView fx:id="btnIdiomaImage" fitWidth="60" preserveRatio="true">
+                            <image>
+                                <Image url="@graphicResources/imagenes/btnIdioma.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                
+                <!-- BOTÓN OPCIONES (arriba derecha, un poco más a la izquierda) -->
+                <Button fx:id="botonOpciones"
+                        style="-fx-background-color: transparent;"
+                        StackPane.alignment="TOP_RIGHT"
+                        translateX="-90" translateY="20">
+                    <graphic>
+                        <ImageView fx:id="botonOpcionesImage" fitWidth="60" preserveRatio="true">
+                            <image>
+                                <Image url="@graphicResources/imagenes/botonOpciones.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                
+            </StackPane>
         </top>
 
 
@@ -87,7 +117,7 @@
                     <Button fx:id="btnVolver"
                             style="-fx-background-color: transparent; -fx-padding: 0;">
                         <graphic>
-                            <ImageView fitWidth="380" preserveRatio="true">
+                            <ImageView fx:id="btnVolverImage" fitWidth="380" preserveRatio="true">
                                 <image>
                                     <Image url="@graphicResources/imagenes/botonVolver.png"/>
                                 </image>
@@ -96,10 +126,10 @@
                     </Button>
 
                     <!-- Botón Crear Cuenta -->
-                    <Button fx:id="btnCrearCuenta"
+                    <Button fx:id="btnRegistro"
                             style="-fx-background-color: transparent; -fx-padding: 0;">
                         <graphic>
-                            <ImageView fitWidth="380" preserveRatio="true">
+                            <ImageView fx:id="btnRegistroImage" fitWidth="380" preserveRatio="true">
                                 <image>
                                     <Image url="@graphicResources/imagenes/btnRegistro.png"/>
                                 </image>

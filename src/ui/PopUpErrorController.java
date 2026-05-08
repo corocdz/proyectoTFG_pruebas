@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import ui.audio.ButtonSound;
 
 public class PopUpErrorController {
 
@@ -46,9 +47,14 @@ public class PopUpErrorController {
         scale.setToY(1);
 
         new ParallelTransition(fade, scale).play();
-
+        
+        Animaciones.animarBoton(btnCerrar);
+        
+        ButtonSound.activarClick(btnCerrar);      
+        
         // Cerrar popup
-        btnCerrar.setOnAction(e -> cerrar());
+        btnCerrar.setOnAction(e -> cerrar());                
+        
     }
 
     private void cerrar() {

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.Rectangle?>
+
+<StackPane fx:id="rootSonido" xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="ui.PopUpSonidoController">
+
+    <!-- Fondo oscuro que bloquea la pantalla -->
+    <Rectangle fx:id="fondoOscuro"
+               fill="rgba(0,0,0,0.55)"
+               StackPane.alignment="CENTER"
+    />
+
+    <!-- Caja del popup -->
+    <VBox fx:id="box" alignment="CENTER" spacing="25"
+          maxWidth="550"
+          maxHeight="550"
+          style="-fx-background-color: rgba(30,0,40,0.95);
+                 -fx-background-radius: 20;
+                 -fx-border-color: #ff2fa1;
+                 -fx-border-width: 3;
+                 -fx-border-radius: 20;">
+
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
+
+        <!-- Título -->
+        <Label fx:id="lblTitulo"
+               text="%popUpSonido.titulo"
+               style="-fx-font-family: 'Minecraft';
+                      -fx-font-size: 30px;
+                      -fx-text-fill: #ff2fa1;"
+        />
+
+        <!-- Música -->
+        <Label fx:id="lblMusica"
+               text="%popUpSonido.musica"
+               style="-fx-font-family: 'Minecraft';
+                      -fx-font-size: 22px;
+                      -fx-text-fill: white;"
+        />
+
+        <Slider fx:id="sliderMusica"
+                min="0" max="1" blockIncrement="0.05"
+                prefWidth="350"
+        />
+
+        <!-- Efectos -->
+        <Label fx:id="lblEfectos"
+               text="%popUpSonido.efectos"
+               style="-fx-font-family: 'Minecraft';
+                      -fx-font-size: 22px;
+                      -fx-text-fill: white;"
+        />
+
+        <Slider fx:id="sliderEfectos"
+                min="0" max="1" blockIncrement="0.05"
+                prefWidth="350"
+        />
+
+        <!-- Botón cerrar -->
+        <Button fx:id="btnCerrar"
+                text="%popUpSonido.cerrar"
+                style="-fx-font-family: 'Minecraft';
+                       -fx-font-size: 22px;
+                       -fx-background-color: #ff2fa1;
+                       -fx-text-fill: white;
+                       -fx-background-radius: 10;"
+        />
+
+    </VBox>
+
+</StackPane>
+

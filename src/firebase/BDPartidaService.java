@@ -77,10 +77,11 @@ public class BDPartidaService {
     // ---------------------------------------------------------
     // ACTUALIZAR VIDAS
     // ---------------------------------------------------------
-    public void actualizarVidas(String codigoSala, Map<String, Integer> vidas, String idToken) throws IOException {
-        db.actualizarNodo("salas/" + codigoSala + "/partida/vidas", vidas, idToken);
-    }
-
+    /**
+     * public void actualizarVidas(String codigoSala, Map<String, Integer>
+     * vidas, String idToken) throws IOException { db.actualizarNodo("salas/" +
+     * codigoSala + "/partida/vidas", vidas, idToken); }
+     */
     public void actualizarPescaitos(String codigoSala, Map<String, Integer> pescaitos, String idToken) throws IOException {
         db.actualizarNodo("salas/" + codigoSala + "/partida/pescaitos", pescaitos, idToken);
     }
@@ -121,15 +122,15 @@ public class BDPartidaService {
     public Map<String, Map<String, Object>> leerPescaitos(String codigoSala, String idToken) throws IOException {
         String json = db.leerNodo("salas/" + codigoSala + "/partida/pescaitos", idToken);
 
+        System.out.println("DEBUG leerPescaitos JSON: " + json); // quitar cuando confirmes el bug
+
         if (json == null || json.equals("null")) {
             return new HashMap<>();
         }
 
-        // Deserializar primero como mapa genérico para poder manejar los null por jugador
         Type tipoGenerico = new TypeToken<Map<String, Object>>() {
         }.getType();
         Map<String, Object> mapaRaw = gson.fromJson(json, tipoGenerico);
-
         if (mapaRaw == null) {
             return new HashMap<>();
         }
@@ -140,10 +141,23 @@ public class BDPartidaService {
             Object valor = entry.getValue();
 
             if (valor instanceof Map) {
-                // Jugador con pescaitos → cast seguro
+                // Caso normal: {"1": true, "3": true, ...}
                 resultado.put(uid, (Map<String, Object>) valor);
+
+            } else if (valor instanceof List) {
+                // Firebase convirtió el mapa en array porque las claves eran números
+                // consecutivos. Cada posición i con valor no-null = pescaito del número i.
+                List<?> lista = (List<?>) valor;
+                Map<String, Object> convertido = new HashMap<>();
+                for (int i = 0; i < lista.size(); i++) {
+                    if (lista.get(i) != null) {
+                        convertido.put(String.valueOf(i), lista.get(i));
+                    }
+                }
+                resultado.put(uid, convertido);
+
             } else {
-                // Jugador sin pescaitos (null u otro tipo) → mapa vacío
+                // null u otro tipo inesperado → sin pescaitos
                 resultado.put(uid, new HashMap<>());
             }
         }
@@ -151,8 +165,12 @@ public class BDPartidaService {
         return resultado;
     }
 
-    public void registrarPescaito(String codigoSala, String uidJugador, int numero, String idToken) throws IOException {
-        String ruta = "salas/" + codigoSala + "/partida/pescaitos/" + uidJugador + "/" + numero;
+    public void registrarPescaito(String codigoSala, String uidJugador,
+            int numero, String idToken) throws IOException {
+        // Usar "n_X" como clave en lugar de "X" para evitar que Firebase
+        // convierta el mapa en array cuando las claves son números consecutivos
+        String ruta = "salas/" + codigoSala + "/partida/pescaitos/"
+                + uidJugador + "/n_" + numero;
         db.actualizarNodo(ruta, true, idToken);
     }
 
@@ -337,39 +355,22 @@ public class BDPartidaService {
      * Escribe true en partida/yusa/marcados/{uidObjetivo} para que el listener
      * de ese cliente sepa que fue elegido.
      */
-    public void marcarObjetivoYusa(String codigoSala, String uidObjetivo,
-            String idToken) throws IOException {
-        db.actualizarNodo("salas/" + codigoSala + "/partida/yusa/marcados/" + uidObjetivo,
-                true, idToken);
-    }
-
-    public void escucharObjetivosYusa(String codigoSala, String idToken,
-            Consumer<Map<String, Object>> callback) {
-        new Thread(() -> {
-            String ultimo = null;
-            while (true) {
-                try {
-                    String json = db.leerNodo(
-                            "salas/" + codigoSala + "/partida/yusa/marcados", idToken);
-                    if (json != null && !json.equals(ultimo)) {
-                        ultimo = json;
-                        if (!"null".equals(json)) {
-                            Map<String, Object> marcados = gson.fromJson(json, Map.class);
-                            if (marcados != null) {
-                                callback.accept(marcados);
-                            }
-                        } else {
-                            callback.accept(new HashMap<>());
-                        }
-                    }
-                    Thread.sleep(500);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
+    /**
+     * public void marcarObjetivoYusa(String codigoSala, String uidObjetivo,
+     * String idToken) throws IOException { db.actualizarNodo("salas/" +
+     * codigoSala + "/partida/yusa/marcados/" + uidObjetivo, true, idToken); }
+     */
+    /**
+     * public void escucharObjetivosYusa(String codigoSala, String idToken,
+     * Consumer<Map<String, Object>> callback) { new Thread(() -> { String
+     * ultimo = null; while (true) { try { String json = db.leerNodo( "salas/" +
+     * codigoSala + "/partida/yusa/marcados", idToken); if (json != null &&
+     * !json.equals(ultimo)) { ultimo = json; if (!"null".equals(json)) {
+     * Map<String, Object> marcados = gson.fromJson(json, Map.class); if
+     * (marcados != null) { callback.accept(marcados); } } else {
+     * callback.accept(new HashMap<>()); } } Thread.sleep(500); } catch
+     * (Exception e) { e.printStackTrace(); } } }).start(); }
+     */
     public void limpiarObjetivosYusa(String codigoSala, String idToken) throws IOException {
         db.borrarNodo("salas/" + codigoSala + "/partida/yusa/marcados", idToken);
     }
@@ -546,6 +547,210 @@ public class BDPartidaService {
             String idToken) throws IOException {
         db.actualizarNodo("salas/" + codigoSala + "/partida/ronda",
                 nuevaRonda, idToken);
+    }
+
+    public void escucharPartida(String codigoSala, String idToken,
+            Consumer<Map<String, Object>> callback) {
+        new Thread(() -> {
+            String ultimo = null;
+            while (true) {
+                try {
+                    String json = db.leerNodo("salas/" + codigoSala + "/partida", idToken);
+                    if (json != null && !json.equals(ultimo)) {
+                        ultimo = json;
+                        if (!"null".equals(json)) {
+                            Map<String, Object> partida = gson.fromJson(json, Map.class);
+                            if (partida != null) {
+                                callback.accept(partida);
+                            }
+                        }
+                    }
+                    Thread.sleep(500);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    // ================================================================
+//  MÉTODOS NUEVOS — añade al final de BDPartidaService.java
+//  antes del último "}"
+// ================================================================
+    /**
+     * Escribe true en partida/yusa/marcados/{uidObjetivo} para que el cliente
+     * de ese jugador sepa que fue elegido como objetivo en esta ronda de yusa.
+     */
+    public void marcarObjetivoYusa(String codigoSala,
+            String uidObjetivo,
+            String idToken) throws IOException {
+        db.actualizarNodo("salas/" + codigoSala + "/partida/yusa/marcados/" + uidObjetivo,
+                true, idToken);
+    }
+
+    /**
+     * Escucha el nodo partida/yusa/marcados. El callback recibe el mapa
+     * completo cada vez que un poseedor de yusa marca a su objetivo. El cliente
+     * usa esto para saber si fue elegido (containsKey(uidLocal)).
+     */
+    public void escucharObjetivosYusa(String codigoSala, String idToken,
+            Consumer<Map<String, Object>> callback) {
+        new Thread(() -> {
+            String ultimo = null;
+            while (true) {
+                try {
+                    String json = db.leerNodo(
+                            "salas/" + codigoSala + "/partida/yusa/marcados", idToken);
+                    if (json != null && !json.equals(ultimo)) {
+                        ultimo = json;
+                        if (!"null".equals(json)) {
+                            Map<String, Object> marcados = gson.fromJson(json, Map.class);
+                            if (marcados != null) {
+                                callback.accept(marcados);
+                            }
+                        } else {
+                            callback.accept(new HashMap<>());
+                        }
+                    }
+                    Thread.sleep(500);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * Actualiza las vidas de todos los jugadores de una vez. Útil al inicio de
+     * la partida para guardar las 3 vidas iniciales.
+     */
+    public void actualizarVidas(String codigoSala,
+            Map<String, Integer> vidas,
+            String idToken) throws IOException {
+        db.actualizarNodo("salas/" + codigoSala + "/partida/vidas", vidas, idToken);
+    }
+
+    public void publicarDoceJugado(String codigoSala, String idToken) throws IOException {
+        db.actualizarNodo("salas/" + codigoSala + "/partida/doceJugado",
+                System.currentTimeMillis(), idToken);
+    }
+
+    public void limpiarDoceJugado(String codigoSala, String idToken) throws IOException {
+        db.borrarNodo("salas/" + codigoSala + "/partida/doceJugado", idToken);
+    }
+
+    public void escucharDoceJugado(String codigoSala, String idToken,
+            java.util.function.Consumer<Long> callback) {
+        new Thread(() -> {
+            String ultimo = null;
+            while (true) {
+                try {
+                    String val = db.leerNodo(
+                            "salas/" + codigoSala + "/partida/doceJugado", idToken);
+                    if (val != null && !val.equals(ultimo) && !"null".equals(val)) {
+                        ultimo = val;
+                        callback.accept(Long.parseLong(val.trim()));
+                    }
+                    Thread.sleep(500);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void publicarEstadoRonda(String codigoSala,
+            String accion,
+            String fase,
+            String turnoUid,
+            String idToken) throws IOException {
+        Map<String, Object> estado = new HashMap<>();
+        estado.put("accion", accion);
+        estado.put("fase", fase);
+        estado.put("turnoUid", turnoUid == null ? "null" : turnoUid);
+        estado.put("ts", System.currentTimeMillis());
+        db.actualizarNodo("salas/" + codigoSala + "/partida/estadoRonda", estado, idToken);
+    }
+
+    public void limpiarEstadoRonda(String codigoSala, String idToken) throws IOException {
+        db.borrarNodo("salas/" + codigoSala + "/partida/estadoRonda", idToken);
+    }
+
+    public void escucharEstadoRonda(String codigoSala, String idToken,
+            Consumer<Map<String, Object>> callback) {
+        new Thread(() -> {
+            String ultimo = null;
+            while (true) {
+                try {
+                    String json = db.leerNodo(
+                            "salas/" + codigoSala + "/partida/estadoRonda", idToken);
+                    if (json != null && !json.equals(ultimo)) {
+                        ultimo = json;
+                        if (!"null".equals(json)) {
+                            Map<String, Object> estado = gson.fromJson(json, Map.class);
+                            if (estado != null) {
+                                callback.accept(estado);
+                            }
+                        }
+                    }
+                    Thread.sleep(200);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void publicarDecisionJugador(String codigoSala,
+            String uidJugador,
+            String decision,
+            String idToken) throws IOException {
+        Map<String, Object> datos = new HashMap<>();
+        datos.put("uid", uidJugador);
+        datos.put("decision", decision);
+        datos.put("ts", System.currentTimeMillis());
+        db.actualizarNodo("salas/" + codigoSala + "/partida/decisionJugador", datos, idToken);
+    }
+
+    public void limpiarDecisionJugador(String codigoSala, String idToken) throws IOException {
+        db.borrarNodo("salas/" + codigoSala + "/partida/decisionJugador", idToken);
+    }
+
+    public void escucharDecisionJugador(String codigoSala, String idToken,
+            Consumer<Map<String, Object>> callback) {
+        new Thread(() -> {
+            String ultimo = null;
+            while (true) {
+                try {
+                    String json = db.leerNodo(
+                            "salas/" + codigoSala + "/partida/decisionJugador", idToken);
+                    if (json != null && !json.equals(ultimo)) {
+                        ultimo = json;
+                        if (!"null".equals(json)) {
+                            Map<String, Object> datos = gson.fromJson(json, Map.class);
+                            if (datos != null) {
+                                callback.accept(datos);
+                            }
+                        }
+                    }
+                    Thread.sleep(200);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void publicarManosYusa(String codigoSala,
+            Map<String, List<String>> manos,
+            String idToken) throws IOException {
+        Map<String, Object> manosSeguras = new HashMap<>();
+        for (Map.Entry<String, List<String>> entry : manos.entrySet()) {
+            List<String> mano = entry.getValue();
+            manosSeguras.put(entry.getKey(),
+                    (mano == null || mano.isEmpty()) ? List.of("EMPTY") : mano);
+        }
+        db.actualizarNodo("salas/" + codigoSala + "/partida/manos", manosSeguras, idToken);
     }
 
 }

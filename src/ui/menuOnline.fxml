@@ -17,22 +17,37 @@
     <BorderPane fx:id="contenidoMenu">
 
         <top>
-            <VBox alignment="CENTER" spacing="10">
-                <padding>
-                    <Insets top="50" right="0" bottom="80" left="0"/>
-                </padding>
+            <StackPane>
+                <VBox alignment="CENTER" spacing="10">
+                    <padding>
+                        <Insets top="50" right="0" bottom="80" left="0"/>
+                    </padding>
 
-                <ImageView fx:id="logoImage" fitWidth="600" preserveRatio="true" />
-            </VBox>
+                    <ImageView fx:id="logoImage" fitWidth="600" preserveRatio="true" />
+                </VBox>
+            
+                <!-- BOTÓN DE IDIOMA (arriba a la derecha) -->
+                <Button fx:id="btnIdioma" style="-fx-background-color: transparent;" StackPane.alignment="TOP_RIGHT"
+                        translateX="-20" translateY="20">
+                    <graphic>
+                        <ImageView fx:id="btnIdiomaImage" fitWidth="60" preserveRatio="true">
+                            <image>
+                                <Image url="@graphicResources/imagenes/btnIdioma.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </StackPane>
+            
         </top>
 
         <center>
             <VBox alignment="CENTER" spacing="40">
                 <Button fx:id="btnCrearSala" style="-fx-background-color: transparent; -fx-padding: 0;">
                     <graphic>
-                        <ImageView fitWidth="380" preserveRatio="true">
+                        <ImageView fx:id="btnCrearSalaImage" fitWidth="380" preserveRatio="true">
                             <image>
-                                <Image url="@graphicResources/imagenes/botonCrearSala.png"/>
+                                <Image url="@graphicResources/imagenes/btnCrearSala.png"/>
                             </image>
                         </ImageView>
                     </graphic>
@@ -40,9 +55,9 @@
 
                 <Button fx:id="btnUnirseSala" style="-fx-background-color: transparent; -fx-padding: 0;">
                     <graphic>
-                        <ImageView fitWidth="380" preserveRatio="true">
+                        <ImageView fx:id="btnUnirseSalaImage" fitWidth="380" preserveRatio="true">
                             <image>
-                                <Image url="@graphicResources/imagenes/botonUnirseSala.png"/>
+                                <Image url="@graphicResources/imagenes/btnUnirseSala.png"/>
                             </image>
                         </ImageView>
                     </graphic>
@@ -50,9 +65,9 @@
 
                 <Button fx:id="btnVolver" style="-fx-background-color: transparent; -fx-padding: 0;">
                     <graphic>
-                        <ImageView fitWidth="380" preserveRatio="true">
+                        <ImageView fx:id="btnVolverImage" fitWidth="380" preserveRatio="true">
                             <image>
-                                <Image url="@graphicResources/imagenes/botonVolver.png"/>
+                                <Image url="@graphicResources/imagenes/btnVolver.png"/>
                             </image>
                         </ImageView>
                     </graphic>

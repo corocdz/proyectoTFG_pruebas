@@ -119,10 +119,21 @@
 }
 
 /* Botones */
+
 .button {
-    -fx-background-radius: 10;
-    -fx-font-weight: bold;
-    -fx-font-size: 14px;
+    -fx-font-family: "Minecraft";
+    -fx-font-size: 26px;
+    -fx-text-fill: white;
+
+    -fx-background-radius: 12;
+    -fx-background-color: rgba(255, 0, 120, 0.6);
+
+    -fx-effect: dropshadow(gaussian, rgba(120, 0, 60, 1), 6, 0.5, 0, 0);
+}
+
+.button:hover {
+    -fx-background-color: rgba(255, 0, 120, 0.8);
+    -fx-opacity: 0.9;
 }
 
 

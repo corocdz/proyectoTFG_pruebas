@@ -42,7 +42,7 @@ public class JuegoYusa implements Juego {
      * Palos posibles de una yusa (el número 1).
      */
     public enum Palo {
-        CORONAS, VERITAS, DIANAS, CORAZONES
+        CORONAS, BALANZAS, DIANAS, CORAZONES
     }
 
     /**
@@ -100,18 +100,20 @@ public class JuegoYusa implements Juego {
      */
     @Override
     public void iniciarPartida(Map<String, List<String>> manos, List<String> baraja) {
-
-        // Registrar jugadores y asignarles vidas
+        // En Yusa, iniciarPartida SOLO inicializa vidas y jugadores.
+        // El reparto de cartas lo hace repartirCartas() llamado desde
+        // iniciarRondaYusa() en el controlador.
+        // NO llamar a repartirCartas() aquí.
         for (String uid : manos.keySet()) {
             vidas.put(uid, VIDAS_INICIALES);
-            jugadoresVivos.add(uid);
+            if (!jugadoresVivos.contains(uid)) {
+                jugadoresVivos.add(uid);
+            }
             if (manos.get(uid) == null) {
                 manos.put(uid, new ArrayList<>());
             }
         }
-
-        // Repartir la primera ronda
-        repartirCartas(manos, baraja);
+        // SIN repartirCartas(manos, baraja) aquí
     }
 
     // ─── 2. Reparto ───────────────────────────────────────────────────────────

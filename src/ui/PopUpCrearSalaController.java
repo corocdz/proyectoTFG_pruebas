@@ -4,9 +4,11 @@
  */
 package ui;
 
+import i18n.IdiomaManager;
 import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,17 +16,29 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import ui.audio.ButtonSound;
 
 public class PopUpCrearSalaController {
 
-    @FXML private StackPane rootPopup;
-    @FXML private VBox popupBox;
+    @FXML
+    private StackPane rootPopup;
+    @FXML
+    private VBox popupBox;
 
-    @FXML private ImageView imgTitulo;
-    @FXML private ImageView imgCrear;
-    @FXML private ImageView imgCancelar;
+    @FXML
+    private ImageView popUpCrearSalaImagen;
+    @FXML
+    private ImageView btnCrearImage;
+    @FXML
+    private ImageView btnCancelarImage;
+    
+    @FXML
+    private Button btnCancelar;
+    @FXML
+    private Button btnCrear;
 
-    @FXML private PasswordField txtPassword;
+    @FXML
+    private PasswordField txtPassword;
 
     private Stage popupStage; // referencia al Stage del popup
     private String resultado = null; // contraseña devuelta
@@ -36,17 +50,17 @@ public class PopUpCrearSalaController {
     private void initialize() {
 
         // Cargar imágenes del popup
-        imgTitulo.setImage(new Image(getClass().getResource(
-                "/ui/graphicResources/imagenes/popUpCrearSalaImagen.png").toExternalForm()));
-
-        imgCrear.setImage(new Image(getClass().getResource(
-                "/ui/graphicResources/imagenes/btnCrear.png").toExternalForm()));
-
-        imgCancelar.setImage(new Image(getClass().getResource(
-                 "/ui/graphicResources/imagenes/btnCancelar.png").toExternalForm()));
+        popUpCrearSalaImagen.setImage(IdiomaManager.cargarImagen("popUpCrearSalaImagen"));
+        btnCrearImage.setImage(IdiomaManager.cargarImagen("btnCrear"));
+        btnCancelarImage.setImage(IdiomaManager.cargarImagen("btnCancelar"));
 
         // Animación de entrada
         animarEntrada();
+        Animaciones.animarBoton(btnCrear);
+        Animaciones.animarBoton(btnCancelar);
+        
+        ButtonSound.activar(btnCancelar);
+        ButtonSound.activar(btnCrear);
     }
 
     // ============================================================

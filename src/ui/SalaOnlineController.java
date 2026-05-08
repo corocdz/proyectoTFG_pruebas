@@ -23,9 +23,15 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import i18n.IdiomaManager;
 import java.util.ResourceBundle;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import partidaUTIL.Baraja;
 import partidaUTIL.Carta;
 import partidaUTIL.JuegoYusa;
+import ui.audio.ButtonSound;
+import ui.audio.SoundManager;
 
 public class SalaOnlineController {
 
@@ -35,9 +41,16 @@ public class SalaOnlineController {
     private ListView<String> listaJugadores;
     @FXML
     private ComboBox<String> comboModoJuego;
-
+    @FXML
+    private ImageView btnIniciarImage;
+    @FXML
+    private ImageView btnSalirImage;
     @FXML
     private Button btnIniciar;
+    @FXML
+    private Button botonOpciones;
+    @FXML
+    private ImageView botonOpcionesImage;
     @FXML
     private Button btnSalir;
     @FXML
@@ -54,8 +67,16 @@ public class SalaOnlineController {
     @FXML
     private void initialize() {
 
+        btnIniciarImage.setImage(IdiomaManager.cargarImagen("btnIniciar"));
+        btnSalirImage.setImage(IdiomaManager.cargarImagen("btnSalir"));
+
         Animaciones.animarBoton(btnSalir);
         Animaciones.animarBoton(btnIniciar);
+        Animaciones.animarBoton(botonOpciones);
+
+        ButtonSound.activar(btnSalir);
+        ButtonSound.activar(btnIniciar);
+        ButtonSound.activar(botonOpciones);
 
         // 1. Mostrar código real de la sala
         lblCodigoSala.setText(bundle.getString("salaOnline.codigo") + SalaContext.codigoSalaActual);
@@ -73,6 +94,14 @@ public class SalaOnlineController {
         );
         comboModoJuego.getSelectionModel().selectFirst();
 
+        // ⭐ EFECTO DE BOTÓN APRETADO AL SELECCIONAR MODO (solo host)
+        comboModoJuego.setOnAction(e -> {
+            if (esHost) {
+                Animaciones.animarPress(comboModoJuego);
+                SoundManager.clickButton();
+            }
+        });
+
         // 4. Control de permisos del host
         if (!esHost) {
             //btnExpulsar.setDisable(true);
@@ -83,6 +112,7 @@ public class SalaOnlineController {
         // 5. Botones
         btnSalir.setOnAction(e -> salir());
         btnIniciar.setOnAction(e -> iniciarPartida());
+        botonOpciones.setOnAction(e -> Animaciones.mostrarPopupSonido(rootSala));
 
         listaJugadores.setCellFactory(lv -> new ListCell<String>() {
 
@@ -115,6 +145,8 @@ public class SalaOnlineController {
                         "-fx-background-color: transparent;"
                         + "-fx-padding: 0;"
                 );
+
+                Animaciones.animarBoton(btnExpulsar);
 
                 btnExpulsar.setOnAction(e -> {
                     listaJugadores.getSelectionModel().select(getItem());
@@ -401,12 +433,43 @@ public class SalaOnlineController {
                         timer.cancel();
                     }
 
-                    javafx.application.Platform.runLater(() -> {
-                        MainApp.cambiarEscena("partida.fxml", 800, 600);
+                    String modoRaw = db.leerNodo("salas/" + codigo + "/partida/modo", token);
+                    String modoSemi = (modoRaw != null) ? modoRaw.replace("\"", "").trim() : null;
+
+// 🔥 ESTA es la variable final que usarás en la lambda
+                    final String modoFinal = modoSemi;
+
+                    Platform.runLater(() -> {
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/partida.fxml"));
+
+                            PartidaControllerBase controller;
+
+                            if ("Pescaito".equals(modoFinal)) {
+                                controller = new PartidaControllerPescaito();
+                            } else if ("Yusa".equals(modoFinal)) {
+                                controller = new PartidaControllerYusa();
+                            } else {
+                                throw new IllegalStateException("Modo desconocido: " + modoFinal);
+                            }
+
+                            loader.setController(controller);
+
+                            Parent root = loader.load();
+
+                            controller.init(codigo, MainApp.usuarioActualUID, MainApp.usuarioActualToken);
+
+                            Stage stage = (Stage) rootSala.getScene().getWindow();
+                            stage.setScene(new Scene(root));
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     });
 
                     return;
                 }
+
             }
 
             // Si la sala ya no existe → el host salió
@@ -423,9 +486,9 @@ public class SalaOnlineController {
                     delay.setOnFinished(ev -> MainApp.cambiarEscena("menuOnline.fxml", 800, 600));
                     delay.play();
                 });
-                
+
                 return;
-                
+
             }
 
             Map<String, Object> sala = new Gson().fromJson(jsonSala, Map.class);

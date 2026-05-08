@@ -20,7 +20,7 @@
                  -fx-padding: 30;">
         
         <!-- IMAGEN SUPERIOR (TÍTULO/BANNER) -->
-        <ImageView fx:id="imgTitulo"
+        <ImageView fx:id="popUpCrearSalaImagen"
                    fitWidth="320"
                    preserveRatio="true"/>
 
@@ -45,7 +45,7 @@
                     onAction="#onCancelar"
                     style="-fx-background-color: transparent; -fx-padding: 0;">
                 <graphic>
-                    <ImageView fx:id="imgCancelar"
+                    <ImageView fx:id="btnCancelarImage"
                                fitWidth="200"
                                preserveRatio="true"/>
                 </graphic>
@@ -55,7 +55,7 @@
                     onAction="#onCrear"
                     style="-fx-background-color: transparent; -fx-padding: 0;">
                 <graphic>
-                    <ImageView fx:id="imgCrear"
+                    <ImageView fx:id="btnCrearImage"
                                fitWidth="200"
                                preserveRatio="true"/>
                 </graphic>

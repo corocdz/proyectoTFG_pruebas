@@ -6,72 +6,92 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ui.MenuController"
-            stylesheets="@graphicResources/menuPrincipal.css">
-
-    <top>
-        <VBox alignment="CENTER" spacing="10" >
-            <padding>
-                <Insets top="50" right="0" bottom="0" left="0"/>
-            </padding>
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="ui.MenuController"
+           fx:id="rootMenuPrincipal"
+           stylesheets="@graphicResources/menuPrincipal.css">
             
-            <ImageView fx:id="logoImage" fitWidth="600" preserveRatio="true" />
-        </VBox>
-    </top>
+    <BorderPane>
 
-    <center>
-        <HBox alignment="CENTER" spacing="120">
-            <Button fx:id="btnOffline" style="-fx-background-color: transparent; -fx-padding: 0;">
-                <graphic>
-                    <ImageView fitWidth="380" preserveRatio="true">
-                        <image>
-                            <Image url="@graphicResources/imagenes/botonOffline.png"/>
-                        </image>
-                    </ImageView>
-                </graphic>
-            </Button>
+        <top>
+            <StackPane>
+                <VBox alignment="CENTER" spacing="10" >
+                    <padding>
+                        <Insets top="50" right="0" bottom="0" left="0"/>
+                    </padding>
             
-            <Button fx:id="btnOnline" style="-fx-background-color: transparent; -fx-padding: 0;">
-                <graphic>
-                    <ImageView fitWidth="380" preserveRatio="true">
-                        <image>
-                            <Image url="@graphicResources/imagenes/botonOnline.png"/>
-                        </image>
-                    </ImageView>
-                </graphic>
-            </Button>
-        </HBox>
-    </center>
+                    <ImageView fx:id="logoImage" fitWidth="600" preserveRatio="true" />
+                </VBox>
+            
+                <!-- BOTÓN DE IDIOMA (arriba a la derecha) -->
+                <Button fx:id="btnIdioma" style="-fx-background-color: transparent;" StackPane.alignment="TOP_RIGHT"
+                        translateX="-20" translateY="20">
+                    <graphic>
+                        <ImageView fx:id="btnIdiomaImage" fitWidth="60" preserveRatio="true">
+                            <image>
+                                <Image url="@graphicResources/imagenes/btnIdioma.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>            
+            
+            </StackPane>       
+        </top>
+
+        <center>
+            <HBox alignment="CENTER" spacing="120">
+                <Button fx:id="btnOffline" style="-fx-background-color: transparent; -fx-padding: 0;">
+                    <graphic>
+                        <ImageView fx:id="btnOfflineImage" fitWidth="380" preserveRatio="true">
+                            <image>
+                                <Image url="@graphicResources/imagenes/btnOffline.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            
+                <Button fx:id="btnOnline" style="-fx-background-color: transparent; -fx-padding: 0;">
+                    <graphic>
+                        <ImageView fx:id="btnOnlineImage" fitWidth="380" preserveRatio="true">
+                            <image>
+                                <Image url="@graphicResources/imagenes/btnOnline.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
+        </center>
     
-    <bottom>
-        <HBox alignment="BOTTOM_LEFT" spacing="20">
-            <padding>
-                <Insets left="20" bottom="20"/>
-            </padding>
+        <bottom>
+            <HBox alignment="BOTTOM_LEFT" spacing="20">
+                <padding>
+                    <Insets left="20" bottom="20"/>
+                </padding>
 
-            <!-- OPCIONES -->
-            <Button fx:id="btnOpciones" style="-fx-background-color: transparent; -fx-padding: 0;">
-                <graphic>
-                    <ImageView fitWidth="100" preserveRatio="true">
-                        <image>
-                            <Image url="@graphicResources/imagenes/botonOpciones.png"/>
-                        </image>
-                    </ImageView>
-                </graphic>
-            </Button>
+                <!-- OPCIONES -->
+                <Button fx:id="btnOpciones" style="-fx-background-color: transparent; -fx-padding: 0;">
+                    <graphic>
+                        <ImageView fitWidth="100" preserveRatio="true">
+                            <image>
+                                <Image url="@graphicResources/imagenes/botonOpciones.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
 
-            <!-- SALIR -->
-            <Button fx:id="btnSalir" style="-fx-background-color: transparent; -fx-padding: 0;">
-                <graphic>
-                    <ImageView fitWidth="100" preserveRatio="true">
-                        <image>
-                            <Image url="@graphicResources/imagenes/botonSalir.png"/>
-                        </image>
-                    </ImageView>
-                </graphic>
-            </Button>
-        </HBox>
-    </bottom>
-</BorderPane>
+                <!-- SALIR -->
+                <Button fx:id="btnSalir" style="-fx-background-color: transparent; -fx-padding: 0;">
+                    <graphic>
+                        <ImageView fitWidth="100" preserveRatio="true">
+                            <image>
+                                <Image url="@graphicResources/imagenes/botonSalir.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
+        </bottom>
+    </BorderPane>
+    
+</StackPane>
